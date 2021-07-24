@@ -16,7 +16,7 @@ router.param('quizID', (req, res, next, id) => {
 })
 
 router
-.get('/:id', getLeaderboard)
+.get('/:quizID', getLeaderboard)
 .get('/', getAllLeaderboard)
 
 module.exports = router;
