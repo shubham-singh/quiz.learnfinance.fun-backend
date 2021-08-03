@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = require('mongoose');
+const { User } = require('../db/dbUser.connect');
 
 const leaderboardSchema = new Schema({
   quiz_id: {
@@ -13,7 +14,7 @@ const leaderboardSchema = new Schema({
     {
       user_id: {
         type:  Schema.Types.ObjectId,
-        ref: 'user'
+        ref: User
       },
       score: {
         type: Number

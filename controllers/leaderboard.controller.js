@@ -2,7 +2,7 @@ const { Leaderboard } = require('../db/db.connect.js');
 
 const getAllLeaderboard = async (req, res) => {
   try {
-    const leaderboard = await Leaderboard.find({});
+    const leaderboard = await Leaderboard.find({}).populate("topScores.user_id");
     res.status(200).json({
       success: true,
       leaderboard
