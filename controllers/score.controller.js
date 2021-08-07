@@ -33,7 +33,8 @@ const addScore = async (req, res) => {
 
       return res.status(200).json({
         success: true,
-        scores: newScore
+        scores: newScore,
+        leaderboard: addToLeaderboard
       })
     }
 
@@ -43,7 +44,8 @@ const addScore = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      scores
+      scores,
+      leaderboard: addToLeaderboard
     })
 
   } catch (error) {

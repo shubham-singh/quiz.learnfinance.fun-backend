@@ -41,14 +41,18 @@ leaderboardSchema.statics.addTopScore = async function(quiz_id ,user_score){
     }
     else if (quiz.topScores.length < 3) {
       quiz.topScores.push(user_score);
-    } else {}
+    } else {
+      return false;
+    }
     await quiz.save();
+    return true;
   } else {
     const newLeaderboard = new this({
       quiz_id,
       topScores: [user_score]
     });
     await newLeaderboard.save();
+    return true;
   }
 }
 
