@@ -2,7 +2,10 @@ const { Score, Leaderboard } = require('../db/db.connect.js');
 
 const getScore = async (req, res) => {
   try {
-    const scores = await Score.findOne({ user_id: req.user.userID })
+    const scores = await Score.findOne({ user_id: req.user.userID }).populate({
+      path: "scores",
+      populate: { path: "quiz_id", select: "quizName" }
+    });
     if (scores === null) {
       throw new Error("user has not taken any quiz");
     }
@@ -21,7 +24,7 @@ const getScore = async (req, res) => {
 const addScore = async (req, res) => {
   try {
     const { quizID, score } = req.body;
-    const scores = await Score.findOne({ user_id: req.user.userID })
+    const scores = await Score.findOne({ user_id: req.user.userID });
     if (scores === null) {
       const newScore = new Score({
         user_id: req.user.userID,
@@ -30,6 +33,11 @@ const addScore = async (req, res) => {
       const addToLeaderboard = await Leaderboard.addTopScore(quizID, {user_id: req.user.userID, score});
 
       await newScore.save();
+
+      await newScore.populate({
+        path: "scores",
+        populate: { path: "quiz_id", select: "quizName" }
+      }).execPopulate();;
 
       return res.status(200).json({
         success: true,
@@ -41,6 +49,11 @@ const addScore = async (req, res) => {
     scores.scores.push({quiz_id: quizID, score});
     const addToLeaderboard = await Leaderboard.addTopScore(quizID, {user_id: req.user.userID, score});
     await scores.save();
+
+    await scores.populate({
+      path: "scores",
+      populate: { path: "quiz_id", select: "quizName" }
+    }).execPopulate();;
 
     res.status(200).json({
       success: true,
